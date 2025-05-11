@@ -52,3 +52,68 @@ std::fstream appendBinary("append.bin", std::ios::app | std::ios::binary);
   - `ifstream` for reading
   - `ofstream` for writing
   - `fstream` for both reading and writing
+
+## File State Flags
+
+C++ provides several state flags to check the status of file operations:
+
+1. `good()` - Returns true if no error flags are set
+```cpp
+if (file.good()) {
+    // File is in good state
+}
+```
+
+2. `eof()` - Returns true if end-of-file is reached
+```cpp
+if (file.eof()) {
+    // Reached end of file
+}
+```
+
+3. `fail()` - Returns true if a non-fatal error occurred
+```cpp
+if (file.fail()) {
+    // Operation failed but stream is still usable
+}
+```
+
+4. `bad()` - Returns true if a fatal error occurred
+```cpp
+if (file.bad()) {
+    // Serious error occurred, stream is unusable
+}
+```
+
+5. `clear()` - Clears all error flags
+```cpp
+file.clear(); // Reset error state
+```
+
+### Example Usage
+```cpp
+std::ifstream file("example.txt");
+if (!file.is_open()) {
+    std::cerr << "Error opening file" << std::endl;
+    return;
+}
+
+while (file.good()) {
+    std::string line;
+    std::getline(file, line);
+    
+    if (file.eof()) {
+        break;  // End of file reached
+    }
+    
+    if (file.fail()) {
+        std::cerr << "Error reading file" << std::endl;
+        break;
+    }
+    
+    // Process the line
+    std::cout << line << std::endl;
+}
+
+file.close();
+```
